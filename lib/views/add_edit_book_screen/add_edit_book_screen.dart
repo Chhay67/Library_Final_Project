@@ -91,7 +91,10 @@ class _AddEditState extends State<AddEdit> {
     }
     super.didChangeDependencies();
   }
-
+  // void _selectImage (File pickedImage,){
+  //   imageFile = pickedImage;
+  //   bookViewModel.uploadImage(imageFile);
+  // }
   _getImageFromGalleryOrCamera(String type) async {
     XFile? pickedFile = await ImagePicker().pickImage(
         source: type == 'camera' ? ImageSource.camera : ImageSource.gallery,
@@ -186,22 +189,8 @@ class _AddEditState extends State<AddEdit> {
                       margin: EdgeInsets.only(top: coverHeight),
                       child: Column(
                         children: [
-                          SizedBox(height: imageHeight / 1.8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    _getImageFromGalleryOrCamera('camera');
-                                  },
-                                  icon: const Icon(Icons.add_a_photo_outlined)),
-                              IconButton(
-                                  onPressed: () {
-                                    _getImageFromGalleryOrCamera('gallery');
-                                  },
-                                  icon: const Icon(Icons.photo_library)),
-                            ],
-                          ),
+                          SizedBox(height: imageHeight / 1.3),
+
                           Padding(
                             padding:
                                 const EdgeInsets.only(left: 15.0, right: 15.0),
@@ -459,37 +448,56 @@ class _AddEditState extends State<AddEdit> {
                     ),
                     Positioned(
                       top: coverHeight - imageHeight / 2,
-                      child: Container(
-                          width: 150,
-                          height: 180,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Consumer<BookViewModel>(
-                            builder: (context, value, _) {
-                              print('${value.imageResponse.status}');
-                              print('${value.imageResponse.message}');
-                              imageId = value.imageResponse.data?.id;
-                              print(' image Id: $imageId');
-                              return imageFile != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: Image.file(
-                                        imageFile!,
-                                        width: 150,
-                                        height: 198,
-                                        fit: BoxFit.cover,
-                                      ))
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: Image.asset(
-                                        'assets/img/image-placeholder.png',
-                                        fit: BoxFit.fill,
-                                        width: 150,
-                                        height: 198,
-                                      ),
-                                    );
-                            },
-                          )),
+                      child: Column(
+                        children: [
+                          Container(
+                              width: 150,
+                              height: 180,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Consumer<BookViewModel>(
+                                builder: (context, value, _) {
+                                  print('${value.imageResponse.status}');
+                                  print('${value.imageResponse.message}');
+                                  imageId = value.imageResponse.data?.id;
+                                  print(' image Id: $imageId');
+                                  return imageFile != null
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(20.0),
+                                          child: Image.file(
+                                            imageFile!,
+                                            width: 150,
+                                            height: 198,
+                                            fit: BoxFit.cover,
+                                          ))
+                                      : ClipRRect(
+                                          borderRadius: BorderRadius.circular(20.0),
+                                          child: Image.asset(
+                                            'assets/img/image-placeholder.png',
+                                            fit: BoxFit.fill,
+                                            width: 150,
+                                            height: 198,
+                                          ),
+                                        );
+                                },
+                              )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    _getImageFromGalleryOrCamera('camera');
+                                  },
+                                  icon: const Icon(Icons.add_a_photo_outlined)),
+                              IconButton(
+                                  onPressed: () {
+                                    _getImageFromGalleryOrCamera('gallery');
+                                  },
+                                  icon: const Icon(Icons.photo_library)),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

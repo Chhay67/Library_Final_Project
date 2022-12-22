@@ -2,7 +2,6 @@ import 'thumnail.dart';
 
 class AuthorModel {
   List<DataAuthor>? data;
-
   AuthorModel({this.data});
 
   AuthorModel.fromJson(Map<String, dynamic> json) {
