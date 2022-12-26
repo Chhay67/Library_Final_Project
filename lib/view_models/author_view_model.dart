@@ -17,23 +17,11 @@ class AuthorViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  setImageResponse(ApiResponse<ImageModel> response){
-    imageResponse = response;
-    notifyListeners();
-  }
-
   setAuthorResponse(ApiResponse<Author> response){
     authorResponse = response;
     notifyListeners();
   }
 
-  Future<dynamic> uploadImage(file) async{
-    await _authorRepository.uploadImage(file).then((value) {
-      setImageResponse(ApiResponse.complete(value));
-    }).onError((error, stackTrace) {
-      setImageResponse(ApiResponse.error(error.toString()));
-    });
-  }
 
   Future<dynamic> fetchAllAuthor() async{
     await _authorRepository.getAuthor().then((value){

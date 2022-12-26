@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
+import 'package:library_final_project/views/image_picker/pick_image.dart';
 import 'package:provider/provider.dart';
 import '../../data/response/status.dart';
 import '../../models/author.dart';
@@ -22,7 +23,7 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   File? imageFile;
   AuthorViewModel authorViewModel = AuthorViewModel();
-  int? imageId;
+  int? _imageId;
   int? isHadImage;
   final _nameFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
@@ -54,15 +55,9 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
     _shotBioController.dispose();
     super.dispose();
   }
-  _getImageFromGalleryOrCamera(String type) async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-        source: type == 'camera' ? ImageSource.camera : ImageSource.gallery,
-        maxHeight: 1280,
-        maxWidth: 960);
-    if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
-      authorViewModel.uploadImage(imageFile);
-    }
+
+  void _selectImageId (int? imageId){
+    _imageId = imageId;
   }
 
   Future<void> _saveForm()async{
@@ -81,16 +76,16 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
     if(_isEditing == false)
     {
       print('post');
-      print('image id$imageId');
-      await authorViewModel.postAuthor(data, imageId);
+      print('image id$_imageId');
+      await authorViewModel.postAuthor(data, _imageId);
     }else {
       if(_isDeleting == false ) {
         print('put');
-        if (imageId == null && isHadImage != null) {
-          imageId = isHadImage;
+        if (_imageId == null && isHadImage != null) {
+          _imageId = isHadImage;
         }
-        print('image id $imageId');
-        await authorViewModel.putAuthor(data, _authorId, imageId);
+        print('image id $_imageId');
+        await authorViewModel.putAuthor(data, _authorId, _imageId);
       }else{
         print('delete');
         print('$_authorId');
@@ -153,23 +148,7 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
                       margin: EdgeInsets.only(top: coverHeight),
                       child: Column(
                         children: [
-                          SizedBox(height: imageHeight / 1.8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    _getImageFromGalleryOrCamera('camera');
-                                  },
-                                  icon:
-                                  const Icon(Icons.add_a_photo_outlined)),
-                              IconButton(
-                                  onPressed: () {
-                                    _getImageFromGalleryOrCamera('gallery');
-                                  },
-                                  icon: const Icon(Icons.photo_library)),
-                            ],
-                          ),
+                          SizedBox(height: imageHeight / 1.3),
                           if(_isEditing == true || _isDeleting == true)
                             Container(
                               margin: const EdgeInsets.only(
@@ -228,7 +207,7 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
                                                   _authorId = authorViewModel.authorList.data?.data?[index].id;
                                                   _authorName = authorViewModel.authorList.data?.data?[index].attributes?.name;
                                                   isHadImage =  authorViewModel.authorList.data?.data?[index].attributes?.photo?.data?.id;
-                                                  print('ss $imageId');
+                                                  print('ss $_imageId');
                                                   _nameController = TextEditingController(text: _authorName);
                                                   _shotBioController = TextEditingController( text: authorViewModel.authorList.data?.data?[index].attributes?.shortBiography);
                                                   _expanded = !_expanded;
@@ -240,7 +219,6 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
                                 ],
                               ),
                             ),
-
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Form(
@@ -345,36 +323,7 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
                     ),
                     Positioned(
                       top:  coverHeight - imageHeight / 2,
-                      child: Container(
-                        width: 150,
-                        height: 180,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20)),
-                        child:  Consumer<AuthorViewModel>(
-                          builder: (context,value,_){
-                            imageId = value.imageResponse.data?.id;
-                            print('image id$imageId');
-                            return imageFile != null
-                                ? ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Image.file(
-                                  imageFile!,
-                                  width: 150,
-                                  height: 198,
-                                  fit: BoxFit.cover,
-                                ))
-                                : ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.asset(
-                                'assets/img/image-placeholder.png',
-                                fit: BoxFit.fill,
-                                width: 150,
-                                height: 198,
-                              ),
-                            );
-                          },
-                        )
-                      ),
+                      child: PickImage(_selectImageId),
                     ),
                   ],
                 ),

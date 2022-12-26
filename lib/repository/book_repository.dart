@@ -1,5 +1,5 @@
 import 'package:library_final_project/models/book_response.dart';
-import 'package:library_final_project/models/image_response.dart';
+
 
 import '../res/app_url.dart';
 import '../data/network/network_api_service.dart';
@@ -41,14 +41,4 @@ class BookRepository{
     }
   }
 
-
-  Future<ImageModel> uploadImage(file)async{
-    try{
-      var response = await _apiService.uploadImage(AppUrl.uploadImage, file);
-      print('repo $response');
-      return response = ImageModel.fromJson(response);
-    }catch(e){
-      rethrow;
-    }
-  }
 }

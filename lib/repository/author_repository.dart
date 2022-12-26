@@ -1,7 +1,7 @@
 
 import 'package:library_final_project/models/author_model.dart';
 import '../models/author.dart';
-import '../models/image_response.dart';
+
 import '../res/app_url.dart';
 import '../data/network/network_api_service.dart';
 
@@ -41,13 +41,4 @@ class AuthorRepository{
     }
   }
 
-
-  Future<ImageModel> uploadImage(file)async{
-    try{
-      var response = await _apiService.uploadImage(AppUrl.uploadImage, file);
-      return response = ImageModel.fromJson(response);
-    }catch(e){
-      rethrow;
-    }
-  }
 }

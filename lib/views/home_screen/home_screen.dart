@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => AddEdit(Random().nextInt(10000), null, null, Option.ADDBOOK, 'ADD BOOK')));
+                                    builder: (context) => AddEditBookScreen(Random().nextInt(10000), null, null, Option.ADDBOOK, 'ADD BOOK')));
 
                               },
                               style: ElevatedButton.styleFrom(
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   duration: Duration(seconds: 2)));
               } else {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AddEdit(bookId, bookCode, editData,Option.EDITBOOK, 'EDIT BOOK')));
+                    builder: (context) => AddEditBookScreen(bookId, bookCode, editData,Option.EDITBOOK, 'EDIT BOOK')));
               }
             },
             icon: const Icon(Icons.edit_rounded)),

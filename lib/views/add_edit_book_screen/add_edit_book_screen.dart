@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:intl/intl.dart';
+import 'package:library_final_project/views/image_picker/pick_image.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/response/status.dart';
@@ -14,24 +15,25 @@ import '../../view_models/author_view_model.dart';
 import '../../view_models/book_view_model.dart';
 import '../home_screen/home_screen.dart';
 
-class AddEdit extends StatefulWidget {
+// ignore: must_be_immutable
+class AddEditBookScreen extends StatefulWidget {
   final int? bookId;
   final String? bookCode;
   final AttrBookResponse? editData;
   Option option;
   final String? title;
-  AddEdit(this.bookId, this.bookCode, this.editData, this.option, this.title,
+  AddEditBookScreen(this.bookId, this.bookCode, this.editData, this.option, this.title,
       {super.key});
 
   @override
-  State<AddEdit> createState() => _AddEditState();
+  State<AddEditBookScreen> createState() => _AddEditBookScreenState();
 }
 
-class _AddEditState extends State<AddEdit> {
+class _AddEditBookScreenState extends State<AddEditBookScreen> {
   File? imageFile;
   BookViewModel bookViewModel = BookViewModel();
   AuthorViewModel authorViewModel = AuthorViewModel();
-  int? imageId;
+  int? _imageId;
   AttrBookResponse? data = AttrBookResponse(
       imageId: null,
       originallyPublished: '',
@@ -91,20 +93,12 @@ class _AddEditState extends State<AddEdit> {
     }
     super.didChangeDependencies();
   }
-  // void _selectImage (File pickedImage,){
-  //   imageFile = pickedImage;
-  //   bookViewModel.uploadImage(imageFile);
-  // }
-  _getImageFromGalleryOrCamera(String type) async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-        source: type == 'camera' ? ImageSource.camera : ImageSource.gallery,
-        maxHeight: 1280,
-        maxWidth: 960);
-    if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
-      bookViewModel.uploadImage(imageFile);
-    }
+
+  void _selectImageId (int? imageId){
+     _imageId = imageId;
+     print('selected ImageId :$_imageId');
   }
+
 
   Future<void> _saveForm() async {
     final isValid = _formKey.currentState!.validate();
@@ -133,18 +127,18 @@ class _AddEditState extends State<AddEdit> {
     //print(' image Id: $imageId');
     if (widget.option == Option.ADDBOOK) {
       print('post');
-      print(' image Id: $imageId');
-      await bookViewModel.postBook(data, imageId);
+      print(' image Id: $_imageId');
+      await bookViewModel.postBook(data, _imageId);
     } else {
-      print(' image Id $imageId');
+      print(' image Id $_imageId');
       print(' edit data ${widget.editData?.imageId}');
-      if (imageId == null && _initValues?['imageId'] != null) {
-        imageId = widget.editData?.imageId;
+      if (_imageId == null && _initValues?['imageId'] != null) {
+        _imageId = widget.editData?.imageId;
       }
-      // imageId ??= int.parse(_initValues!['imageId']);
+
       print('put');
-      print('imageId $imageId');
-      await bookViewModel.putBook(data, widget.bookId, imageId);
+      print('imageId $_imageId');
+      await bookViewModel.putBook(data, widget.bookId, _imageId);
     }
 
     bookViewModel.toggleLoadingStatus();
@@ -190,7 +184,6 @@ class _AddEditState extends State<AddEdit> {
                       child: Column(
                         children: [
                           SizedBox(height: imageHeight / 1.3),
-
                           Padding(
                             padding:
                                 const EdgeInsets.only(left: 15.0, right: 15.0),
@@ -333,6 +326,7 @@ class _AddEditState extends State<AddEdit> {
                               Icons.star,
                               color: Colors.amber,
                             ),
+
                             onRatingUpdate: (rating) {
                               print(rating);
                               data = AttrBookResponse(
@@ -448,56 +442,7 @@ class _AddEditState extends State<AddEdit> {
                     ),
                     Positioned(
                       top: coverHeight - imageHeight / 2,
-                      child: Column(
-                        children: [
-                          Container(
-                              width: 150,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Consumer<BookViewModel>(
-                                builder: (context, value, _) {
-                                  print('${value.imageResponse.status}');
-                                  print('${value.imageResponse.message}');
-                                  imageId = value.imageResponse.data?.id;
-                                  print(' image Id: $imageId');
-                                  return imageFile != null
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          child: Image.file(
-                                            imageFile!,
-                                            width: 150,
-                                            height: 198,
-                                            fit: BoxFit.cover,
-                                          ))
-                                      : ClipRRect(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          child: Image.asset(
-                                            'assets/img/image-placeholder.png',
-                                            fit: BoxFit.fill,
-                                            width: 150,
-                                            height: 198,
-                                          ),
-                                        );
-                                },
-                              )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    _getImageFromGalleryOrCamera('camera');
-                                  },
-                                  icon: const Icon(Icons.add_a_photo_outlined)),
-                              IconButton(
-                                  onPressed: () {
-                                    _getImageFromGalleryOrCamera('gallery');
-                                  },
-                                  icon: const Icon(Icons.photo_library)),
-                            ],
-                          ),
-                        ],
-                      ),
+                      child: PickImage(_selectImageId),
                     ),
                   ],
                 ),

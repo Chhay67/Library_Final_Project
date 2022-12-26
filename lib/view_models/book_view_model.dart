@@ -25,21 +25,6 @@ class BookViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  setImageResponse(ApiResponse<ImageModel> response){
-    imageResponse = response;
-    print('imageViewModel $imageResponse');
-    notifyListeners();
-  }
-
-  Future<dynamic> uploadImage(file) async{
-    await _bookRepository.uploadImage(file).then((value) {
-      print('imageViewModel1 $value');
-      setImageResponse(ApiResponse.complete(value));
-    }).onError((error, stackTrace) {
-      setImageResponse(ApiResponse.error(error.toString()));
-    });
-  }
-
   Future<dynamic> fetchAllBooks() async{
     await _bookRepository.getBook().then((value){
       setBookList(ApiResponse.complete(value));
