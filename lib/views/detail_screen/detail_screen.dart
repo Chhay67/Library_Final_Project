@@ -203,6 +203,11 @@ class DetailScreen extends StatelessWidget {
                           child: Image.network(
                             '$imageUrl',
                             fit: BoxFit.cover,
+                            loadingBuilder: (context, child, progress) {
+                            return progress == null
+                                ? child
+                                : const Center(child:  CircularProgressIndicator(color: Colors.black,)); // progress mean waiting download image from network
+                          },
                           ))
                           : ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),

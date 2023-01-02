@@ -176,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   : Expanded(
                       child: RefreshIndicator(
                         onRefresh: refreshScreen,
+                        color: Colors.black,
                         child: Container(
                             width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.all(13.0),

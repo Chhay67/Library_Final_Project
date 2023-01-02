@@ -27,7 +27,12 @@ class DrawerBar extends StatelessWidget {
                   width: double.infinity,
                   height: coverHeight,
                   margin: EdgeInsets.only(bottom: bottom ),
-                  child: Image.network('https://z-p3-scontent.fpnh5-2.fna.fbcdn.net/v/t39.30808-6/292252498_110774601690646_1618977608937918361_n.png?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeHi5NGOCslzaAEjsydTbxGNVfkQPvqVi-9V-RA--pWL7-cI0Wj8LP13RRemA-hm1ZAy-zydlZXzxLIjyzhm5X1B&_nc_ohc=d1UjmjbW3xsAX8R0aoI&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh5-2.fna&oh=00_AfBe-iNvQzjelg8Sa3CtZpMTz8IQOorXYcqkGM_34hf5ZQ&oe=638DCBFB',),
+                  child: Image.network('https://z-p3-scontent.fpnh5-2.fna.fbcdn.net/v/t39.30808-6/292252498_110774601690646_1618977608937918361_n.png?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeHi5NGOCslzaAEjsydTbxGNVfkQPvqVi-9V-RA--pWL7-cI0Wj8LP13RRemA-hm1ZAy-zydlZXzxLIjyzhm5X1B&_nc_ohc=y2coUkYP5toAX_-Ler5&_nc_zt=23&_nc_ht=z-p3-scontent.fpnh5-2.fna&oh=00_AfCIHCc4uoT6hMQSoztylJFBhdeq9328Ko4qCyoCkC7S3Q&oe=63B7533B',
+                  loadingBuilder:  (context, child, progress) {
+                    return progress == null
+                        ? child
+                        : const Center(child:  CircularProgressIndicator(color: Colors.black,)); // progress mean waiting download image from network
+                  },),
                 ),
               Positioned(
                 top: top,
