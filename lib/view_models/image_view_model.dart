@@ -21,4 +21,9 @@ class ImageViewModel extends ChangeNotifier{
       setImageResponse(ApiResponse.error(error.toString()));
     });
   }
+  bool isUploadImage = false;
+  void toggleUploadStatus (){
+    isUploadImage = !isUploadImage;
+    notifyListeners();
+  }
 }

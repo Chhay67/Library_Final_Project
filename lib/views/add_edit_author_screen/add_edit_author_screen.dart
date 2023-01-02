@@ -25,6 +25,7 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
   AuthorViewModel authorViewModel = AuthorViewModel();
   int? _imageId;
   int? isHadImage;
+  String? imageUrl;
   final _nameFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
 
@@ -207,6 +208,7 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
                                                   _authorId = authorViewModel.authorList.data?.data?[index].id;
                                                   _authorName = authorViewModel.authorList.data?.data?[index].attributes?.name;
                                                   isHadImage =  authorViewModel.authorList.data?.data?[index].attributes?.photo?.data?.id;
+                                                  imageUrl = authorViewModel.authorList.data?.data?[index].attributes?.photo?.data?.attributes?.url;
                                                   print('ss $_imageId');
                                                   _nameController = TextEditingController(text: _authorName);
                                                   _shotBioController = TextEditingController( text: authorViewModel.authorList.data?.data?[index].attributes?.shortBiography);
@@ -323,7 +325,7 @@ class _AddEditAuthorScreenState extends State<AddEditAuthorScreen> {
                     ),
                     Positioned(
                       top:  coverHeight - imageHeight / 2,
-                      child: PickImage(_selectImageId),
+                      child: PickImage(_selectImageId,imageUrl),
                     ),
                   ],
                 ),

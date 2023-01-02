@@ -176,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   : Expanded(
                       child: RefreshIndicator(
                         onRefresh: refreshScreen,
+                        color: Colors.black,
                         child: Container(
                             width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.all(13.0),
@@ -267,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           starReview: book.attributes?.starReview,
                                                           authorId: book.attributes?.author?.data?.id,
                                                           authorName:book.attributes?.author?.data?.attributes?.name,
+                                                          pdfLink: book.attributes?.thumnail?.data?.attributes?.url,
                                                           imageId:book.attributes?.thumnail?.data?.id );
                                                       Navigator.of(context).push(MaterialPageRoute(
                                                           builder: (context) {

@@ -62,8 +62,10 @@ class BookItem extends StatelessWidget {
                     ),
                     Text(
                       '${book?.title}',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 17),
+                          fontWeight: FontWeight.bold, fontSize: 17,),
                     )
                   ],
                 ),

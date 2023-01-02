@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 
 class PickImage extends StatefulWidget {
   final Function imageId;
-  PickImage(this.imageId);
+  final String? imageUrl;
+  PickImage(this.imageId,this.imageUrl);
 
   @override
   State<PickImage> createState() => _PickImageState();
@@ -29,7 +30,9 @@ class _PickImageState extends State<PickImage> {
       setState(() {
         imageFile = File(pickedFile.path);
       });
+      imageViewModel.toggleUploadStatus();
       await imageViewModel.uploadImage(imageFile);
+      imageViewModel.toggleUploadStatus();
     }
   }
 
@@ -52,6 +55,16 @@ class _PickImageState extends State<PickImage> {
                   _imageId = value.imageResponse.data?.id;
                   widget.imageId(_imageId);
                   print(' image Id: $_imageId');
+                  if(imageViewModel.isUploadImage)
+                    return Container(
+                      width: 150,
+                      height: 198,
+                      decoration: BoxDecoration(
+                        borderRadius:BorderRadius.circular(20.0) ,
+                        color: Colors.black12,
+                      ),
+                      child: Center(child: CircularProgressIndicator(color: Colors.black,),),
+                    );
                   return imageFile != null
                       ? ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
@@ -62,14 +75,19 @@ class _PickImageState extends State<PickImage> {
                         fit: BoxFit.cover,
                       ))
                       : ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Image.asset(
-                      'assets/img/image-placeholder.png',
-                      fit: BoxFit.fill,
-                      width: 150,
-                      height: 198,
-                    ),
-                  );
+                        borderRadius: BorderRadius.circular(20.0),
+                        child:widget.imageUrl != null
+                            ? Image.network('${widget.imageUrl}',
+                            fit: BoxFit.fill,
+                            width: 150,
+                            height: 198,)
+                            :  Image.asset(
+                              'assets/img/image-placeholder.png',
+                              fit: BoxFit.fill,
+                              width: 150,
+                              height: 198,
+                            ),
+                    );
                 },
               )),
           Row(

@@ -60,7 +60,7 @@ class _AddEditBookScreenState extends State<AddEditBookScreen> {
     'description': '',
     'price': 0,
     'imageUrl': '',
-    'starReview': null,
+    'starReview': 3,
   };
 
   @override
@@ -127,6 +127,10 @@ class _AddEditBookScreenState extends State<AddEditBookScreen> {
     //print(' image Id: $imageId');
     if (widget.option == Option.ADDBOOK) {
       print('post');
+      if(data?.starReview == null){
+        data?.starReview = 3;
+      }
+      print('star1 : ${data?.starReview}');
       print(' image Id: $_imageId');
       await bookViewModel.postBook(data, _imageId);
     } else {
@@ -317,7 +321,6 @@ class _AddEditBookScreenState extends State<AddEditBookScreen> {
                           RatingBar.builder(
                             initialRating:
                                 widget.editData?.starReview?.toDouble() ?? 3,
-                            minRating: 1,
                             allowHalfRating: true,
                             itemCount: 5,
                             itemSize: 25,
@@ -328,7 +331,7 @@ class _AddEditBookScreenState extends State<AddEditBookScreen> {
                             ),
 
                             onRatingUpdate: (rating) {
-                              print(rating);
+                              print("star ${rating}");
                               data = AttrBookResponse(
                                 starReview: rating.round(),
                                 description: data?.description,
@@ -357,7 +360,7 @@ class _AddEditBookScreenState extends State<AddEditBookScreen> {
                                             child: Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: CircularProgressIndicator(
-                                            color: Colors.black12,
+                                            color: Colors.black,
                                           ),
                                         ));
                                       case Status.ERROR:
@@ -432,7 +435,7 @@ class _AddEditBookScreenState extends State<AddEditBookScreen> {
                                   child: bookViewModel.isLoading == false
                                       ? const Text('SAVE', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
                                         )
-                                      : const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                                      : const Center(child: CircularProgressIndicator(color: Colors.black,)),
                                 ),
                               );
                             },
@@ -442,7 +445,7 @@ class _AddEditBookScreenState extends State<AddEditBookScreen> {
                     ),
                     Positioned(
                       top: coverHeight - imageHeight / 2,
-                      child: PickImage(_selectImageId),
+                      child: PickImage(_selectImageId,widget.editData?.pdfLink),
                     ),
                   ],
                 ),

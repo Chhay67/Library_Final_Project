@@ -30,7 +30,16 @@ class NetworkApiService {
         decode.map((imageModel) => ImageModel.fromJson(imageModel)));
     return imageResponse.first.toJson();
   }
+  Future getImage(String url , int? imageId) async{
+    var request = http.Request('GET', Uri.parse('$url/$imageId'));
 
+    var response = await request.send();
+
+    var resource = await response.stream.bytesToString();
+
+    return json.decode(resource);
+
+  }
 
   Future postBook(String url,dynamic data ,int? imageId ) async{
     AttrBookResponse? bookData = data;
