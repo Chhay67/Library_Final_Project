@@ -54,6 +54,7 @@ class BookItem extends StatelessWidget {
                   children: [
                     Text(
                       '${book?.author?.data?.attributes?.name}',
+                      maxLines: 1,
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w300),
                     ),
